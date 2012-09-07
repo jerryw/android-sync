@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
 
+    <!-- So we can start our service. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- A signature level permission granted only to the Firefox
          versions sharing an Android Account type.  This needs to
          agree with GlobalConstants.PER_ACCOUNT_TYPE_PERMISSION. -->
