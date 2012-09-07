@@ -14,13 +14,16 @@ echo "Copying manifests..."
 rsync -a manifests $SYNC/
 
 echo "Copying sources. All use of R must be compiled with Fennec."
-SOURCEDIR="src/main/java/org/mozilla/gecko/sync"
-SOURCEFILES=$(find "$SOURCEDIR" -name '*.java' -not -name 'GlobalConstants.java' -and -not -name 'BrowserContract.java' | sed "s,$SOURCEDIR/,sync/,")
-rsync -C --exclude 'GlobalConstants.java' --exclude 'BrowserContract.java' --exclude '*.in' -a $SOURCEDIR $ANDROID/base/
+SOURCEROOT="src/main/java/org/mozilla/gecko"
+SYNCSOURCEDIR="$SOURCEROOT/sync"
+BACKGROUNDSOURCEDIR="$SOURCEROOT/background"
+SOURCEFILES=$(find "$BACKGROUNDSOURCEDIR" "$SYNCSOURCEDIR" -name '*.java' -not -name 'GlobalConstants.java' -and -not -name 'BrowserContract.java' | sed "s,$SOURCEROOT/,,")
+rsync -C --exclude 'GlobalConstants.java' --exclude 'BrowserContract.java' --exclude '*.in' -a $SYNCSOURCEDIR $ANDROID/base/
+rsync -C --exclude '*.in' -a $BACKGROUNDSOURCEDIR $ANDROID/base/
 
 echo "Copying preprocessed GlobalConstants file."
 PREPROCESS_FILES="sync/GlobalConstants.java"
-cp $SOURCEDIR/GlobalConstants.java.in $ANDROID/base/sync/
+cp $SYNCSOURCEDIR/GlobalConstants.java.in $ANDROID/base/sync/
 
 echo "Copying preprocessed sync_authenticator.xml."
 cp sync_authenticator.xml.template $ANDROID/base/resources/xml/sync_authenticator.xml.in
