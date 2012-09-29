@@ -24,7 +24,7 @@ public class AnnouncementsBroadcastService extends IntentService {
   }
 
   private void toggleAlarm(final Context context, boolean enabled) {
-    Logger.debug(LOG_TAG, (enabled ? "R" : "Unr") + "egistering Snippets broadcast receiver...");
+    Logger.info(LOG_TAG, (enabled ? "R" : "Unr") + "egistering Snippets broadcast receiver...");
     final AlarmManager alarm = getAlarmManager(context);
 
     final Intent service = new Intent(context, AnnouncementsStartReceiver.class);
@@ -37,7 +37,7 @@ public class AnnouncementsBroadcastService extends IntentService {
 
     final long firstEvent = System.currentTimeMillis();
     final long pollInterval = getPollInterval(context);
-    Logger.debug(LOG_TAG, "Setting inexact repeating alarm for interval " + pollInterval);
+    Logger.info(LOG_TAG, "Setting inexact repeating alarm for interval " + pollInterval);
     alarm.setInexactRepeating(AlarmManager.RTC, firstEvent, pollInterval, pending);
   }
 
@@ -67,20 +67,20 @@ public class AnnouncementsBroadcastService extends IntentService {
 
     if ("org.mozilla.gecko.SNIPPETS_PREF".equals(action)) {
       // Gecko is telling us something.
-      Logger.debug(LOG_TAG, intent.getStringExtra("branch") + "/" +
+      Logger.info(LOG_TAG, intent.getStringExtra("branch") + "/" +
                             intent.getStringExtra("pref")   + " = " +
                             (intent.hasExtra("enabled") ? intent.getBooleanExtra("enabled", true) : ""));
 
       recordLastLaunch(this);
       if (intent.hasExtra("enabled")) {
-        Logger.debug(LOG_TAG, "Enabled set. Toggling alarm accordingly.");
+        Logger.info(LOG_TAG, "Enabled set. Toggling alarm accordingly.");
         toggleAlarm(this, intent.getBooleanExtra("enabled", true));
         return;
       }
 
       // This intent comes with a few extras to allow us
       // to look up the value if it wasn't provided.
-      Logger.debug(LOG_TAG, "Looking up enabled state in prefs.");
+      Logger.info(LOG_TAG, "Looking up enabled state in prefs.");
       String branch = intent.getStringExtra("branch");
       String pref = intent.getStringExtra("pref");
 
@@ -90,11 +90,13 @@ public class AnnouncementsBroadcastService extends IntentService {
       }
 
       SharedPreferences preferences = this.getSharedPreferences(branch, 0);
+      Logger.info(LOG_TAG, "Preferences is " + preferences);
       if (preferences == null) {
         toggleAlarm(this, true);
         return;
       }
 
+      Logger.info(LOG_TAG, "Preferences has " + pref + "? " + preferences.contains(pref));
       final boolean enabled = preferences.getBoolean(pref, true);
       toggleAlarm(this, enabled);
       return;
