@@ -22,7 +22,7 @@ public class BackgroundServiceConstants {
 
   static final String DEFAULT_ANNOUNCE_SERVER_URL = "http://people.mozilla.com/~rnewman/announce/";
 
-  public static final long DEFAULT_ANNOUNCE_FETCH_INTERVAL_MSEC = AlarmManager.INTERVAL_HALF_DAY;
+  public static final long DEFAULT_ANNOUNCE_FETCH_INTERVAL_MSEC = 15000; // AlarmManager.INTERVAL_HALF_DAY;
   public static final long DEFAULT_BACKOFF = 2 * 24 * 60 * 60 * 1000;   // Two days. Used if no Retry-After header.
 
   public static final String BACKGROUND_USER_AGENT = "Firefox Background " + GlobalConstants.MOZ_APP_VERSION;
