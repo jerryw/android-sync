@@ -22,6 +22,7 @@ import org.mozilla.gecko.background.Announcement;
 import org.mozilla.gecko.background.AnnouncementsFetchDelegate;
 import org.mozilla.gecko.background.AnnouncementsFetcher;
 import org.mozilla.gecko.sync.Logger;
+import org.mozilla.gecko.sync.log.writers.StdoutLogWriter;
 import org.mozilla.gecko.sync.net.BaseResource;
 import org.simpleframework.http.Path;
 import org.simpleframework.http.Request;
@@ -243,6 +244,7 @@ public class TestAnnouncementFetch {
 
   @Test
   public void testAnnouncementFetch() throws URISyntaxException {
+    Logger.startLoggingTo(new StdoutLogWriter());
     BaseResource.rewriteLocalhost = false;
 
     AnnouncementFetchMockServer mockServer = new AnnouncementFetchMockServer();
